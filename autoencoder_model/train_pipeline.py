@@ -3,6 +3,7 @@ import torch
 import matplotlib.pyplot as plt
 
 from autoencoder_model.data_preparation import data_loader
+from autoencoder_model.file_handler import FileHandler
 
 from autoencoder_model.func_loss import loss_vae
 
@@ -16,6 +17,7 @@ criterion = loss_vae
 model = CVAE().to(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-5)
 
+
 train_loader,test_loader = data_loader()
 
 X_val = next(iter(test_loader))
@@ -28,7 +30,7 @@ val_fit_bool = True
 
 
 
-def train(output_images_bool, val_fit_bool, n_epochs=50, ):
+def train(output_images_bool, val_fit_bool, n_epochs=50):
     
     train_losses = []
     val_losses = []
@@ -43,7 +45,7 @@ def train(output_images_bool, val_fit_bool, n_epochs=50, ):
         for i, X_batch in enumerate(train_loader):
             optimizer.zero_grad()
             mu, log_var, reconstruction = model(X_batch[0].to(device),X_batch[1].to(device))
-            loss = criterion(X_batch[0].to(device).float(), mu, log_var, reconstruction) #((X_batch[0].to(device) - reconstruction)**2).sum() + (log_var**2 + mu**2 - torch.log(log_var) - 1/2).sum()
+            loss = criterion(X_batch[0].to(device).float(), mu, log_var, reconstruction) 
             loss.backward()
             optimizer.step()
             train_losses_per_epoch.append(loss.item())
@@ -59,13 +61,19 @@ def train(output_images_bool, val_fit_bool, n_epochs=50, ):
 
             model.eval()
             val_losses_per_epoch = []
-            #clear_output(wait=True)#очищаем прошлые изображения
             with torch.no_grad():
                 mu, log_var, reconstruction = model(X_val[0].to(device),X_val[1].to(device))
                 loss = criterion(X_val[0].to(device).float(), mu, log_var, reconstruction) #((X_val[0].to(device) - reconstruction)**2).sum() + (log_var**2 + mu**2 - torch.log(log_var) - 1/2).sum()
                 val_losses_per_epoch.append(loss.item())
 
-            val_losses.append(np.mean(val_losses_per_epoch))            
+            val_losses.append(np.mean(val_losses_per_epoch))
+    
+    # Сохраняем model
+    FileHandler.save_file(model, 'model')
+
+    # Сохраняем Loss
+    FileHandler.save_file(train_losses, 'train_losses')      
+    return model            
 
 def plt_show(reconstruction, epoch, avg_loss, n_epochs):
     '''
