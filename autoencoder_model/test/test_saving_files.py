@@ -26,9 +26,10 @@ class FileHandlerTests(unittest.TestCase):
         # Проверяем, что загруженные данные совпадают с исходными данными
         self.assertEqual(data, loaded_data)
 
-        # Очищаем папку после теста
+        
+        # Удаляем файл после проверки
         os.remove(file_path)
-        os.removedirs(self.folder_path)
+
 
 if __name__ == '__main__':
     unittest.main()
