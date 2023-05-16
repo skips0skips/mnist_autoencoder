@@ -11,17 +11,20 @@ from autoencoder_model.plt_show import Plt_show
 
 
 class Trainer:
-    def __init__(self):
-        self.model, self.criterion, self.optimizer, self.val_fit_bool, self.output_images_bool, self.device = Config.get_config()
-        self.test_loader, self.train_loader = data_loader()
+    def __init__(self, model, criterion, optimizer, device, test_loader, train_loader):
+        self.model = model
+        self.criterion = criterion
+        self.optimizer = optimizer
+        self.device = device
+        self.test_loader = test_loader
+        self.train_loader = train_loader
+        self.train_losses = []
+        self.val_losses = []
 
-    def train(self, output_images_bool, val_fit_bool, n_epochs=50):
+    def train(self, output_images_bool, val_fit_bool, n_epochs):
         
         if val_fit_bool:
             X_val = next(iter(self.test_loader))
-
-        train_losses = []
-        val_losses = []
 
         for epoch in range(n_epochs):
 
@@ -38,7 +41,7 @@ class Trainer:
                 self.optimizer.step()
                 train_losses_per_epoch.append(loss.item())
                 avg_loss += loss / len(self.train_loader) #рассчитайте потери, чтобы показать пользователю
-            train_losses.append(np.mean(train_losses_per_epoch))#значения для вывода графика лосса
+            self.train_losses.append(np.mean(train_losses_per_epoch))#значения для вывода графика лосса
             
             print('%d / %d - loss: %f' % (epoch+1, n_epochs, avg_loss))
             
@@ -52,15 +55,15 @@ class Trainer:
                     loss = self.criterion(X_val[0].to(self.device).float(), mu, log_var, reconstruction) #((X_val[0].to(device) - reconstruction)**2).sum() + (log_var**2 + mu**2 - torch.log(log_var) - 1/2).sum()
                     val_losses_per_epoch.append(loss.item())
 
-                val_losses.append(np.mean(val_losses_per_epoch))
+                self.val_losses.append(np.mean(val_losses_per_epoch))
 
                 if output_images_bool:
                     Plt_show.plt_show(reconstruction, epoch, avg_loss, n_epochs,X_val)
         
         # Сохраняем self.model
-        FileHandler.save_file(self.model, 'self.model')
+        FileHandler.save_file(self.model, 'model')
 
         # Сохраняем Loss
-        FileHandler.save_file(train_losses, 'train_losses')      
-        return self.model 
+        FileHandler.save_file(self.train_losses, 'train_losses')      
+
                

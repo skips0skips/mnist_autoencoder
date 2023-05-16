@@ -18,27 +18,34 @@ class Config:
     
     @staticmethod
     def get_model():
-        model = CVAE().to(get_device())
+        model = CVAE().to(Config.get_device())
         return model
     
     @staticmethod
     def get_optimizer():
-        optimizer = torch.optim.Adam(get_model().parameters(), lr=1e-3, weight_decay=1e-5)
+        optimizer = torch.optim.Adam(Config.get_model().parameters(), lr=1e-3, weight_decay=1e-5)
         return optimizer
     
-    def get_config():
-         # Вывод изображений при обучении
+    def get_config_model():
+
+        model = Config.get_model()
+
+        criterion = Config.get_criterion()
+
+        optimizer = Config.get_optimizer()
+
+        device = Config.get_device()
+
+        return model, criterion, optimizer, device
+    
+    def get_config_params_train():
+        n_epochs = 50
+        # Вывод изображений при обучении
         output_images_bool = False
         # Проверка на валидационной выборке
         val_fit_bool = True
-
-        model = get_model()
-
-        criterion = get_criterion()
-
-        optimizer = get_optimizer()
-
-        return model, criterion, optimizer, val_fit_bool, output_images_bool
+        
+        return output_images_bool, val_fit_bool, n_epochs
 
     
     

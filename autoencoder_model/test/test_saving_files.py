@@ -1,8 +1,6 @@
 import os
-import pickle
 import unittest
 from pathlib import Path
-import sys
 
 from ..file_handler import FileHandler
 
