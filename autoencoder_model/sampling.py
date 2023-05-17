@@ -35,7 +35,8 @@ class Sampling:
   def get_sample(self,latent_vector,number,output_images_bool):          
       '''Создадим даталоадеры для цифр 5 и 7, которые будут состоять из полученного латентного пространства и лейба цифры'''
       label_tensor_number = torch.full((15,), number)
-      number_dataloader = Data.create_data_loader(latent_vector,label_tensor_number)
+      data2 = Data()
+      number_dataloader = data2.create_data_loader(latent_vector,label_tensor_number)
       # Получаем цифру
       self.model.eval()
       with torch.no_grad():

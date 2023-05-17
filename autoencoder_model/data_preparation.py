@@ -1,5 +1,6 @@
 import torch
 from torchvision import datasets, transforms
+from torch.utils.data import TensorDataset
 
 class Data:
     def __init__(self):
@@ -19,6 +20,6 @@ class Data:
         return train_loader,test_loader
     
     def create_data_loader(self,latent_vector,label_tensor_number):
-        number_dataset = datasets.TensorDataset(latent_vector, label_tensor_number)
+        number_dataset = TensorDataset(latent_vector, label_tensor_number)
         number_dataloader = torch.utils.data.DataLoader(number_dataset, batch_size=self.batch_size, shuffle=True)
         return number_dataloader

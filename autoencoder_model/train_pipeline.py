@@ -1,10 +1,6 @@
 import numpy as np
 import torch
 
-from autoencoder_model.config import Config
-
-from autoencoder_model.data_preparation import data_loader
-
 from autoencoder_model.file_handler import FileHandler
 
 from autoencoder_model.plt_show import Plt_show

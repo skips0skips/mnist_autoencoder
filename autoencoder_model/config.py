@@ -41,7 +41,7 @@ class Config:
     def get_config_params_train():
         n_epochs = 50
         # Вывод изображений при обучении
-        output_images_bool = False
+        output_images_bool = True
         # Проверка на валидационной выборке
         val_fit_bool = True
         

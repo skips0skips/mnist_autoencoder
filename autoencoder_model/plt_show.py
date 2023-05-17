@@ -20,3 +20,4 @@ class Plt_show:
         for i, img in enumerate(image):
             plt.subplot(1, 15, i+1)
             plt.imshow(img.permute(1, 2, 0).cpu().detach().numpy(), cmap='gist_gray')
+        plt.show()
