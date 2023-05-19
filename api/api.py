@@ -108,16 +108,16 @@ def get_config():
         n_epochs=n_epochs
     )
 
-@app.put("/set_config")
-def set_config(train_fit_bool: bool = None, val_fit_bool: bool = None, n_epochs: int = None, output_images_bool: bool = None):
-    main.set_config(train_fit_bool, val_fit_bool, n_epochs, output_images_bool)
-    return {"message": "Параметры конфигурации изменены"}
+# @app.put("/set_config")
+# def set_config(train_fit_bool: bool = None, val_fit_bool: bool = None, n_epochs: int = None, output_images_bool: bool = None):
+#     main.set_config(train_fit_bool, val_fit_bool, n_epochs, output_images_bool)
+#     return {"message": "Параметры конфигурации изменены"}
 
 
-@app.get("/set_initial_phrase")
-def set_initial_phrase():
-    initial_phrase = main.set_initial_phrase()
-    return {"initial_phrase": initial_phrase}
+# @app.get("/set_initial_phrase")
+# def set_initial_phrase():
+#     initial_phrase = main.set_initial_phrase()
+#     return {"initial_phrase": initial_phrase}
 
 if __name__ == "__main__":
     import uvicorn
