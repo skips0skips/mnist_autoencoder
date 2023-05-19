@@ -5,6 +5,8 @@ import os
 import joblib
 import torch
 
+from autoencoder_model.model import CVAE
+
 
 class FileHandler:
     folder_path = str(Path('autoencoder_model', 'file'))
